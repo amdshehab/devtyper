@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.scss";
-import { useGenerateSnippet } from "./useGenerateKey";
+import { useGenerateSnippet } from "./useGenerateSnippet";
 import { Character } from "./components/character";
 
 function App() {
@@ -17,8 +17,8 @@ function App() {
   return (
     <div className="App">
       <div className="Snippet">
-        {currentSnippet.split("").map(character => (
-          <Character character={character} />
+        {currentSnippet.map(({ character, status }) => (
+          <Character character={character} status={status} />
         ))}
       </div>
     </div>

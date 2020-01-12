@@ -1,0 +1,12 @@
+.Character {
+  font-size: large;
+  &--active {
+    background-color: white;
+  }
+  &--correct {
+    background-color: green;
+  }
+  &--incorrect {
+    background-color: red;
+  }
+}
