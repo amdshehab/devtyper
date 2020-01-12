@@ -1,7 +1,7 @@
 import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
-import { useGenerateKey } from "./useGenerateKey";
+import "./App.scss";
+import { useGenerateSnippet } from "./useGenerateKey";
+import { Character } from "./components/character";
 
 function App() {
   const KeyboardKeys = [
@@ -12,9 +12,17 @@ function App() {
     "function foo() { return bar }"
   ];
 
-  const { currentKey, setKeyIndex } = useGenerateKey(KeyboardKeys);
+  const { currentSnippet, setSnippetIndex } = useGenerateSnippet(KeyboardKeys);
 
-  return <div className="App"> {currentKey}</div>;
+  return (
+    <div className="App">
+      <div className="Snippet">
+        {currentSnippet.split("").map(character => (
+          <Character character={character} />
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export default App;

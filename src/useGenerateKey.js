@@ -1,14 +1,14 @@
 import { useState } from "react";
 
 /**
- * @param {Array<String>} keyBoard - user keyboard
+ * @param {Array<String>} snippetList - user keyboard
  */
-export const useGenerateKey = keyBoard => {
-  const [keyIndex, setKeyIndex] = useState(0);
-  const currentKey = keyBoard[keyIndex];
+export const useGenerateSnippet = snippetList => {
+  const [keyIndex, setSnippetIndex] = useState(0);
+  const currentSnippet = snippetList[keyIndex];
 
   return {
-    currentKey,
-    setKeyIndex
+    currentSnippet,
+    setSnippetIndex
   };
 };
