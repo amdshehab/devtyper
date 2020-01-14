@@ -4,12 +4,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  white-space: pre-line;
 }
 
 .Snippet {
   box-sizing: border-box;
-  padding: 10px;
-  width: 50%;
-  height: 50%;
+  padding: 60px;
+  width: 60%;
+  height: 80%;
   border: 1px solid black;
 }

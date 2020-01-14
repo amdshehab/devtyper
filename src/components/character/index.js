@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import cx from "classnames";
 import "./index.scss";
 /**
@@ -7,14 +7,16 @@ import "./index.scss";
  * @param {("ACTIVE" | "CORRECT" | "INCORRECT")} input.status - status
  */
 
-export const Character = ({ character, status }) => (
-  <span
-    className={cx("Character", {
-      "Character--active": status === "ACTIVE",
-      "Character--correct": status === "CORRECT",
-      "Character--incorrect": status === "INCORRECT"
-    })}
-  >
-    {character}
-  </span>
-);
+export const Character = memo(({ character, status }) => {
+  return (
+    <span
+      className={cx("Character", {
+        "Character--active": status === "ACTIVE",
+        "Character--correct": status === "CORRECT",
+        "Character--incorrect": status === "INCORRECT"
+      })}
+    >
+      {character}
+    </span>
+  );
+});

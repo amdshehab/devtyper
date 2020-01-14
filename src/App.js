@@ -1,34 +1,56 @@
 import React, { useState, useEffect } from "react";
 import "./App.scss";
-import { useGenerateSnippet } from "./useGenerateSnippet";
 import { Character } from "./components/character";
 
+const KeyboardKeys = [
+  "function foo() {\n}",
+  "import * as bar from foo",
+  "const foo = () => bar + 2",
+  "foo.map(x => x + x)",
+  "function foo() { return bar }"
+];
+
+/**
+ * @param {String} snippet
+ */
+const convertSnippetToChars = snippet =>
+  snippet.split("").map(character => ({
+    character,
+    status: "ACTIVE"
+  }));
+
 function App() {
-  const KeyboardKeys = [
-    "function foo() {}",
-    "import * as bar from foo",
-    "const foo = () => bar + 2",
-    "foo.map(x => x + x)",
-    "function foo() { return bar }"
-  ];
+  const [snippetIndex, setSnippetIndex] = useState(0);
 
-  const { currentSnippet, setSnippetIndex } = useGenerateSnippet(KeyboardKeys);
-
-  const [statefullSnippet, setStatefullSnippet] = useState(currentSnippet);
+  const [snippet, setSnippet] = useState(
+    convertSnippetToChars(KeyboardKeys[snippetIndex])
+  );
 
   const [currentChar, setCurrentChar] = useState(0);
 
   useEffect(() => {
-    const handleKeyPress = ({ key }) => {
-      console.log("currentChar", currentChar, key);
+    setSnippet(convertSnippetToChars(KeyboardKeys[snippetIndex]));
+  }, [snippetIndex]);
 
-      if (key === statefullSnippet[currentChar].character) {
-        statefullSnippet[currentChar].status = "CORRECT";
-        setStatefullSnippet([...statefullSnippet]);
+  useEffect(() => {
+    const handleKeyPress = ({ key }) => {
+      if (snippet[currentChar].character === "\n") {
+        if (key === "Enter") {
+          snippet[currentChar].status = "CORRECT";
+          setCurrentChar(char => char + 1);
+        }
+      }
+
+      if (key === snippet[currentChar].character) {
+        snippet[currentChar].status = "CORRECT";
         setCurrentChar(char => char + 1);
       } else {
-        statefullSnippet[currentChar].status = "INCORRECT";
-        setStatefullSnippet([...statefullSnippet]);
+        snippet[currentChar].status = "INCORRECT";
+      }
+
+      if (currentChar === snippet.length - 1) {
+        setSnippetIndex(i => i + 1);
+        setCurrentChar(0);
       }
     };
 
@@ -36,16 +58,16 @@ function App() {
     return () => {
       window.removeEventListener("keydown", handleKeyPress);
     };
-  }, [statefullSnippet, currentChar]);
+  }, [snippet, currentChar, setSnippetIndex]);
 
   return (
     <div className="App">
       <div className="Snippet">
-        {statefullSnippet.map(({ character, status }, i) => (
+        {snippet.map(({ character, status }, i) => (
           <Character
             character={character}
             status={status}
-            key={character + i}
+            key={character + i * 2}
           />
         ))}
       </div>
