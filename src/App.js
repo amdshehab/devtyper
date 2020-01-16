@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "./App.scss";
 import { Character } from "./components/character";
+import { Score } from "./components/score";
 
 const KeyboardKeys = [
-  "function foo() {\n}",
+  "function foo() {}",
   "import * as bar from foo",
   "const foo = () => bar + 2",
   "foo.map(x => x + x)",
@@ -34,18 +35,14 @@ function App() {
 
   useEffect(() => {
     const handleKeyPress = ({ key }) => {
-      if (snippet[currentChar].character === "\n") {
-        if (key === "Enter") {
-          snippet[currentChar].status = "CORRECT";
-          setCurrentChar(char => char + 1);
-        }
-      }
-
       if (key === snippet[currentChar].character) {
         snippet[currentChar].status = "CORRECT";
+        setSnippet([...snippet]);
         setCurrentChar(char => char + 1);
       } else {
         snippet[currentChar].status = "INCORRECT";
+        setCurrentChar(char => char + 1);
+        setSnippet([...snippet]);
       }
 
       if (currentChar === snippet.length - 1) {
@@ -60,6 +57,14 @@ function App() {
     };
   }, [snippet, currentChar, setSnippetIndex]);
 
+  const generateScore = useCallback(
+    () =>
+      (snippet.filter(({ status }) => status === "CORRECT").length /
+        snippet.length) *
+      100,
+    [snippet]
+  );
+
   return (
     <div className="App">
       <div className="Snippet">
@@ -71,6 +76,7 @@ function App() {
           />
         ))}
       </div>
+      <Score score={generateScore()} />
     </div>
   );
 }
