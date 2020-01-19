@@ -81,9 +81,8 @@ function App() {
           ))}
         </div>
         <Metrics className="Container__metrics-container">
-          <Score score={generateScore()} />
+          <Score score={generateScore()} className="Container__score" />
           <div>hello</div>
-          <div>lssls</div>
         </Metrics>
       </div>
     </div>

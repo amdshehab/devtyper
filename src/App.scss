@@ -28,10 +28,14 @@
     flex: 0.7;
   }
   &__metrics-container {
+    border-top: 1px solid #2a2925;
     flex: 0.3;
     width: 100%;
     > * {
       width: 20%;
     }
+  }
+  &__score {
+    flex: 0.15;
   }
 }
