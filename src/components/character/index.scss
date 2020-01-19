@@ -1,12 +1,13 @@
 .Character {
   font-size: 5rem;
+  color: #437672;
   &--active {
     background-color: white;
   }
   &--correct {
-    background-color: green;
+    background-color: rgba(118, 67, 71, 0.3);
   }
   &--incorrect {
-    background-color: red;
+    background-color: rgba(237, 94, 109, 0.7);
   }
 }

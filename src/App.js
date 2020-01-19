@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import "./App.scss";
 import { Character } from "./components/character";
 import { Score } from "./components/score";
+import { Metrics } from "./components/metrics";
 
 const KeyboardKeys = [
   "function foo() {}",
@@ -59,24 +60,32 @@ function App() {
 
   const generateScore = useCallback(
     () =>
-      (snippet.filter(({ status }) => status === "CORRECT").length /
-        snippet.length) *
-      100,
+      Math.ceil(
+        (snippet.filter(({ status }) => status === "CORRECT").length /
+          snippet.length) *
+          100
+      ),
     [snippet]
   );
 
   return (
     <div className="App">
-      <div className="Snippet">
-        {snippet.map(({ character, status }, i) => (
-          <Character
-            character={character}
-            status={status}
-            key={character + i * 2}
-          />
-        ))}
+      <div className="Container Container--flex-container">
+        <div className="Container__snippet-container">
+          {snippet.map(({ character, status }, i) => (
+            <Character
+              character={character}
+              status={status}
+              key={character + i * 2}
+            />
+          ))}
+        </div>
+        <Metrics className="Container__metrics-container">
+          <Score score={generateScore()} />
+          <div>hello</div>
+          <div>lssls</div>
+        </Metrics>
       </div>
-      <Score score={generateScore()} />
     </div>
   );
 }
