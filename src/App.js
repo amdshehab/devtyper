@@ -30,12 +30,38 @@ function App() {
 
   const [currentChar, setCurrentChar] = useState(0);
 
+  const [initialTime, setInitialTime] = useState(null);
+
+  // how many times he has clicked in the minute
+  // clicks => counter goes up
+  // clicks / seconds * 60
+
+  const getCorrectKeys = useCallback(
+    () => snippet.filter(({ status }) => status === "CORRECT").length,
+    [snippet]
+  );
+
+  const calculateClicksPerMin = (timeElapsed, correctKeys) =>
+    correctKeys / timeElapsed / 60000;
+
+  const useGenerateKpm = () => {
+    console.log("what", initialTime);
+
+    return calculateClicksPerMin(
+      performance.now() - initialTime,
+      getCorrectKeys()
+    );
+  };
+
   useEffect(() => {
     setSnippet(convertSnippetToChars(KeyboardKeys[snippetIndex]));
   }, [snippetIndex]);
 
   useEffect(() => {
     const handleKeyPress = ({ key }) => {
+      if (!initialTime) setInitialTime(performance.now());
+      // console.log("whats the deal ->", initialTime, performance.now());
+
       if (key === snippet[currentChar].character) {
         snippet[currentChar].status = "CORRECT";
         setSnippet([...snippet]);
@@ -56,16 +82,11 @@ function App() {
     return () => {
       window.removeEventListener("keydown", handleKeyPress);
     };
-  }, [snippet, currentChar, setSnippetIndex]);
+  }, [snippet, currentChar, setSnippetIndex, initialTime]);
 
   const generateScore = useCallback(
-    () =>
-      Math.ceil(
-        (snippet.filter(({ status }) => status === "CORRECT").length /
-          snippet.length) *
-          100
-      ),
-    [snippet]
+    () => Math.ceil((getCorrectKeys() / snippet.length) * 100),
+    [snippet, getCorrectKeys]
   );
 
   return (
@@ -82,7 +103,7 @@ function App() {
         </div>
         <Metrics className="Container__metrics-container">
           <Score score={generateScore()} className="Container__score" />
-          <div>hello</div>
+          <div>{useGenerateKpm()}</div>
         </Metrics>
       </div>
     </div>
